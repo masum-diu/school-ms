@@ -75,14 +75,9 @@ class SchoolClassController extends Controller
 
     public function destroy(SchoolClass $schoolClass)
     {
-        if ($schoolClass->students()->exists()) {
-            return back()->withErrors([
-                'delete' => 'Cannot delete this class while it has students. Move or remove students first.',
-            ]);
-        }
-
+        $name = $schoolClass->name;
         $schoolClass->delete();
 
-        return redirect()->route('classes.index')->with('success', 'Class deleted successfully.');
+        return redirect()->route('classes.index')->with('success', "Class \"{$name}\" deleted successfully.");
     }
 }

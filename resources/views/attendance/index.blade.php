@@ -1,42 +1,38 @@
 @extends('layouts.app')
 @section('title', 'Mark Attendance')
 @section('content')
-<form method="GET" class="flex flex-wrap gap-3 mb-6 bg-white p-4 rounded-xl border border-gray-100">
-    <input type="date" name="date" value="{{ $date }}" class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
-    <select name="class" id="class_id" class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+<form method="GET" class="filter-bar">
+    <input type="date" name="date" value="{{ $date }}" class="input w-auto">
+    <select name="class" id="class_id" class="select w-auto min-w-[140px]">
         <option value="">Select Class</option>
         @foreach($classes as $class)
             <option value="{{ $class->id }}" @selected($classId == $class->id)>{{ $class->name }}</option>
         @endforeach
     </select>
-    <select name="section" id="section_id" class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+    <select name="section" id="section_id" class="select w-auto min-w-[140px]">
         <option value="">Select Section</option>
     </select>
-    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm">Load Students</button>
+    <button type="submit" class="btn-primary">Load Students</button>
 </form>
 
 @if($students->count())
-<form method="POST" action="{{ route('attendance.store') }}" class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+<form method="POST" action="{{ route('attendance.store') }}" class="table-wrap">
     @csrf
     <input type="hidden" name="date" value="{{ $date }}">
     <input type="hidden" name="school_class_id" value="{{ $classId }}">
     <input type="hidden" name="section_id" value="{{ $sectionId }}">
-    <table class="w-full text-sm">
-        <thead class="bg-gray-50 border-b">
-            <tr>
-                <th class="text-left px-4 py-3">Roll</th>
-                <th class="text-left px-4 py-3">Name</th>
-                <th class="text-left px-4 py-3">Status</th>
-            </tr>
+    <table class="data-table">
+        <thead>
+            <tr><th>Roll</th><th>Name</th><th>Status</th></tr>
         </thead>
-        <tbody class="divide-y divide-gray-50">
+        <tbody>
             @foreach($students as $student)
                 <tr>
-                    <td class="px-4 py-3">{{ $student->roll_no ?? '—' }}</td>
-                    <td class="px-4 py-3 font-medium">{{ $student->name }}</td>
-                    <td class="px-4 py-3">
+                    <td class="font-mono text-slate-500">{{ $student->roll_no ?? '—' }}</td>
+                    <td class="font-medium text-slate-800">{{ $student->name }}</td>
+                    <td>
                         @php $current = $attendances[$student->id] ?? 'present'; @endphp
-                        <select name="attendance[{{ $student->id }}]" class="border border-gray-300 rounded-lg px-2 py-1 text-sm">
+                        <select name="attendance[{{ $student->id }}]" class="select w-auto min-w-[130px]">
                             @foreach(['present','absent','late','leave'] as $s)
                                 <option value="{{ $s }}" @selected($current === $s)>{{ ucfirst($s) }}</option>
                             @endforeach
@@ -46,14 +42,14 @@
             @endforeach
         </tbody>
     </table>
-    <div class="p-4 border-t">
-        <button type="submit" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg text-sm font-medium">Save Attendance</button>
+    <div class="px-6 py-4 border-t border-slate-100 bg-slate-50/50">
+        <button type="submit" class="btn-primary bg-emerald-600 hover:bg-emerald-700 focus:ring-emerald-500">Save Attendance</button>
     </div>
 </form>
 @elseif($classId && $sectionId)
-    <p class="text-gray-400 text-center py-8">No active students in this section.</p>
+    <div class="card card-body empty-state">No active students in this section.</div>
 @else
-    <p class="text-gray-400 text-center py-8">Select a class and section to mark attendance.</p>
+    <div class="card card-body empty-state">Select a class and section to mark attendance.</div>
 @endif
 
 <script>

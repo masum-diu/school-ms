@@ -2,30 +2,48 @@
 @section('title', 'Add Exam Result')
 @section('content')
 <div class="max-w-lg">
-    <form method="POST" action="{{ route('exams.store') }}" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
+    <form method="POST" action="{{ route('exams.store') }}" class="card card-body">
         @csrf
-        <div><label class="block text-sm font-medium mb-1">Exam Name *</label><input type="text" name="exam_name" value="{{ old('exam_name', 'Mid Term') }}" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></div>
-        <div><label class="block text-sm font-medium mb-1">Student *</label>
-            <select name="student_id" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
-                <option value="">Select Student</option>
-                @foreach(\App\Models\Student::where('status','active')->with('schoolClass')->orderBy('name')->get() as $s)
-                    <option value="{{ $s->id }}">{{ $s->name }} — {{ $s->schoolClass->name }}</option>
-                @endforeach
-            </select>
+        <div class="space-y-5">
+            <div>
+                <label class="label">Exam Name <span class="text-red-500">*</span></label>
+                <input type="text" name="exam_name" value="{{ old('exam_name', 'Mid Term') }}" required class="input">
+            </div>
+            <div>
+                <label class="label">Student <span class="text-red-500">*</span></label>
+                <select name="student_id" required class="select">
+                    <option value="">Select Student</option>
+                    @foreach(\App\Models\Student::where('status','active')->with('schoolClass')->orderBy('name')->get() as $s)
+                        <option value="{{ $s->id }}" @selected(old('student_id') == $s->id)>{{ $s->name }} — {{ $s->schoolClass->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div>
+                <label class="label">Subject <span class="text-red-500">*</span></label>
+                <select name="subject_id" required class="select">
+                    @foreach($subjects as $sub)
+                        <option value="{{ $sub->id }}" @selected(old('subject_id') == $sub->id)>{{ $sub->name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-grid !gap-4">
+                <div>
+                    <label class="label">Marks Obtained <span class="text-red-500">*</span></label>
+                    <input type="number" name="marks_obtained" step="0.01" value="{{ old('marks_obtained') }}" required class="input" min="0">
+                </div>
+                <div>
+                    <label class="label">Total Marks <span class="text-red-500">*</span></label>
+                    <input type="number" name="total_marks" value="{{ old('total_marks', 100) }}" required class="input" min="1">
+                </div>
+            </div>
+            <div>
+                <label class="label">Exam Date <span class="text-red-500">*</span></label>
+                <input type="date" name="exam_date" value="{{ old('exam_date', date('Y-m-d')) }}" required class="input">
+            </div>
         </div>
-        <div><label class="block text-sm font-medium mb-1">Subject *</label>
-            <select name="subject_id" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
-                @foreach($subjects as $sub)<option value="{{ $sub->id }}">{{ $sub->name }}</option>@endforeach
-            </select>
-        </div>
-        <div class="grid grid-cols-2 gap-4">
-            <div><label class="block text-sm font-medium mb-1">Marks Obtained *</label><input type="number" name="marks_obtained" step="0.01" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></div>
-            <div><label class="block text-sm font-medium mb-1">Total Marks *</label><input type="number" name="total_marks" value="100" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></div>
-        </div>
-        <div><label class="block text-sm font-medium mb-1">Exam Date *</label><input type="date" name="exam_date" value="{{ date('Y-m-d') }}" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></div>
-        <div class="flex gap-3">
-            <button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg text-sm font-medium">Save Result</button>
-            <a href="{{ route('exams.index') }}" class="bg-gray-100 px-6 py-2 rounded-lg text-sm">Cancel</a>
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Save Result</button>
+            <a href="{{ route('exams.index') }}" class="btn-secondary">Cancel</a>
         </div>
     </form>
 </div>

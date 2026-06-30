@@ -24,12 +24,11 @@
             <div class="flex gap-2 mt-5 pt-4 border-t border-slate-100">
                 <a href="{{ route('classes.show', $class) }}" class="btn-ghost text-xs flex-1 justify-center">View</a>
                 <a href="{{ route('classes.edit', $class) }}" class="btn-ghost text-xs flex-1 justify-center">Edit</a>
-                @if($class->students_count === 0)
-                    <form method="POST" action="{{ route('classes.destroy', $class) }}" class="flex-1" onsubmit="return confirm('Delete {{ $class->name }}?')">
-                        @csrf @method('DELETE')
-                        <button type="submit" class="btn-ghost text-xs text-red-600 w-full justify-center">Delete</button>
-                    </form>
-                @endif
+                <form method="POST" action="{{ route('classes.destroy', $class) }}" class="flex-1"
+                      onsubmit="return confirm('Delete {{ $class->name }}?@if($class->students_count > 0)\n\nThis will also delete {{ $class->students_count }} student(s) in this class.@endif')">
+                    @csrf @method('DELETE')
+                    <button type="submit" class="btn-ghost text-xs text-red-600 hover:bg-red-50 w-full justify-center">Delete</button>
+                </form>
             </div>
         </div>
     @empty

@@ -2,28 +2,44 @@
 @section('title', 'Add Subject')
 @section('content')
 <div class="max-w-lg">
-    <form method="POST" action="{{ route('subjects.store') }}" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-4">
+    <form method="POST" action="{{ route('subjects.store') }}" class="card card-body">
         @csrf
-        <div><label class="block text-sm font-medium mb-1">Subject Name *</label><input type="text" name="name" value="{{ old('name') }}" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></div>
-        <div><label class="block text-sm font-medium mb-1">Code *</label><input type="text" name="code" value="{{ old('code') }}" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></div>
-        <div><label class="block text-sm font-medium mb-1">Class</label>
-            <select name="school_class_id" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
-                <option value="">All Classes</option>
-                @foreach($classes as $class)<option value="{{ $class->id }}">{{ $class->name }}</option>@endforeach
-            </select>
+        <div class="form-grid">
+            <div class="sm:col-span-2">
+                <label class="label">Subject Name <span class="text-red-500">*</span></label>
+                <input type="text" name="name" value="{{ old('name') }}" required class="input" placeholder="e.g. Mathematics">
+            </div>
+            <div>
+                <label class="label">Code <span class="text-red-500">*</span></label>
+                <input type="text" name="code" value="{{ old('code') }}" required class="input font-mono" placeholder="MAT">
+            </div>
+            <div>
+                <label class="label">Class</label>
+                <select name="school_class_id" class="select">
+                    <option value="">All Classes</option>
+                    @foreach($classes as $class)<option value="{{ $class->id }}" @selected(old('school_class_id') == $class->id)>{{ $class->name }}</option>@endforeach
+                </select>
+            </div>
+            <div class="sm:col-span-2">
+                <label class="label">Teacher</label>
+                <select name="teacher_id" class="select">
+                    <option value="">Not assigned</option>
+                    @foreach($teachers as $t)<option value="{{ $t->id }}" @selected(old('teacher_id') == $t->id)>{{ $t->name }}</option>@endforeach
+                </select>
+            </div>
+            <div>
+                <label class="label">Full Marks <span class="text-red-500">*</span></label>
+                <input type="number" name="full_marks" value="{{ old('full_marks', 100) }}" required class="input" min="1">
+            </div>
+            <div>
+                <label class="label">Pass Marks <span class="text-red-500">*</span></label>
+                <input type="number" name="pass_marks" value="{{ old('pass_marks', 33) }}" required class="input" min="1">
+            </div>
         </div>
-        <div><label class="block text-sm font-medium mb-1">Teacher</label>
-            <select name="teacher_id" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
-                <option value="">Not assigned</option>
-                @foreach($teachers as $t)<option value="{{ $t->id }}">{{ $t->name }}</option>@endforeach
-            </select>
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Save Subject</button>
+            <a href="{{ route('subjects.index') }}" class="btn-secondary">Cancel</a>
         </div>
-        <div class="grid grid-cols-2 gap-4">
-            <div><label class="block text-sm font-medium mb-1">Full Marks *</label><input type="number" name="full_marks" value="{{ old('full_marks', 100) }}" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></div>
-            <div><label class="block text-sm font-medium mb-1">Pass Marks *</label><input type="number" name="pass_marks" value="{{ old('pass_marks', 33) }}" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></div>
-        </div>
-        <div class="flex gap-3"><button type="submit" class="bg-indigo-600 text-white px-6 py-2 rounded-lg text-sm font-medium">Save</button>
-            <a href="{{ route('subjects.index') }}" class="bg-gray-100 px-6 py-2 rounded-lg text-sm">Cancel</a></div>
     </form>
 </div>
 @endsection

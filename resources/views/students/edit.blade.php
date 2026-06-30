@@ -2,81 +2,81 @@
 @section('title', 'Edit Student')
 @section('content')
 <div class="max-w-3xl">
-    <form method="POST" action="{{ route('students.update', $student) }}" class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 space-y-5">
+    <form method="POST" action="{{ route('students.update', $student) }}" class="card card-body">
         @csrf @method('PUT')
-        <div class="grid grid-cols-2 gap-4">
+        <div class="form-grid">
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Admission No</label>
-                <input type="text" value="{{ $student->admission_no }}" disabled class="w-full border border-gray-200 bg-gray-50 rounded-lg px-3 py-2 text-sm text-gray-600">
+                <label class="label">Admission No</label>
+                <input type="text" value="{{ $student->admission_no }}" disabled class="input-disabled font-mono">
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Roll No</label>
-                <input type="text" name="roll_no" value="{{ old('roll_no', $student->roll_no) }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                <label class="label">Roll No</label>
+                <input type="text" name="roll_no" value="{{ old('roll_no', $student->roll_no) }}" class="input">
             </div>
-            <div class="col-span-2">
-                <label class="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
-                <input type="text" name="name" value="{{ old('name', $student->name) }}" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
-            </div>
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                <input type="email" name="email" value="{{ old('email', $student->email) }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+            <div class="sm:col-span-2">
+                <label class="label">Full Name <span class="text-red-500">*</span></label>
+                <input type="text" name="name" value="{{ old('name', $student->name) }}" required class="input">
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
-                <input type="text" name="phone" value="{{ old('phone', $student->phone) }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                <label class="label">Email</label>
+                <input type="email" name="email" value="{{ old('email', $student->email) }}" class="input">
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth</label>
-                <input type="date" name="date_of_birth" value="{{ old('date_of_birth', $student->date_of_birth?->format('Y-m-d')) }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                <label class="label">Phone</label>
+                <input type="text" name="phone" value="{{ old('phone', $student->phone) }}" class="input">
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Gender *</label>
-                <select name="gender" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                <label class="label">Date of Birth</label>
+                <input type="date" name="date_of_birth" value="{{ old('date_of_birth', $student->date_of_birth?->format('Y-m-d')) }}" class="input">
+            </div>
+            <div>
+                <label class="label">Gender <span class="text-red-500">*</span></label>
+                <select name="gender" required class="select">
                     @foreach(['male','female','other'] as $g)
                         <option value="{{ $g }}" @selected(old('gender', $student->gender) == $g)>{{ ucfirst($g) }}</option>
                     @endforeach
                 </select>
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Class *</label>
-                <select name="school_class_id" id="class_id" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                <label class="label">Class <span class="text-red-500">*</span></label>
+                <select name="school_class_id" id="class_id" required class="select">
                     @foreach($classes as $class)
                         <option value="{{ $class->id }}" @selected(old('school_class_id', $student->school_class_id) == $class->id)>{{ $class->name }}</option>
                     @endforeach
                 </select>
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Section *</label>
-                <select name="section_id" id="section_id" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"></select>
+                <label class="label">Section <span class="text-red-500">*</span></label>
+                <select name="section_id" id="section_id" required class="select"></select>
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Guardian Name *</label>
-                <input type="text" name="guardian_name" value="{{ old('guardian_name', $student->guardian_name) }}" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                <label class="label">Guardian Name <span class="text-red-500">*</span></label>
+                <input type="text" name="guardian_name" value="{{ old('guardian_name', $student->guardian_name) }}" required class="input">
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Guardian Phone *</label>
-                <input type="text" name="guardian_phone" value="{{ old('guardian_phone', $student->guardian_phone) }}" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                <label class="label">Guardian Phone <span class="text-red-500">*</span></label>
+                <input type="text" name="guardian_phone" value="{{ old('guardian_phone', $student->guardian_phone) }}" required class="input">
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Relation</label>
-                <input type="text" name="guardian_relation" value="{{ old('guardian_relation', $student->guardian_relation) }}" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                <label class="label">Relation</label>
+                <input type="text" name="guardian_relation" value="{{ old('guardian_relation', $student->guardian_relation) }}" class="input">
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Admission Date *</label>
-                <input type="date" name="admission_date" value="{{ old('admission_date', $student->admission_date->format('Y-m-d')) }}" required class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                <label class="label">Admission Date <span class="text-red-500">*</span></label>
+                <input type="date" name="admission_date" value="{{ old('admission_date', $student->admission_date->format('Y-m-d')) }}" required class="input">
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
-                <select name="status" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                <label class="label">Status</label>
+                <select name="status" class="select">
                     @foreach(['active','inactive','graduated'] as $s)
                         <option value="{{ $s }}" @selected(old('status', $student->status) == $s)>{{ ucfirst($s) }}</option>
                     @endforeach
                 </select>
             </div>
         </div>
-        <div class="flex gap-3 pt-2">
-            <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg text-sm font-medium">Update</button>
-            <a href="{{ route('students.index') }}" class="bg-gray-100 hover:bg-gray-200 px-6 py-2 rounded-lg text-sm">Cancel</a>
+        <div class="form-actions">
+            <button type="submit" class="btn-primary">Update Student</button>
+            <a href="{{ route('students.index') }}" class="btn-secondary">Cancel</a>
         </div>
     </form>
 </div>
