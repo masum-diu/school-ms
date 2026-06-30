@@ -18,21 +18,25 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
-        User::create([
-            'name' => 'Admin',
-            'email' => 'admin@school.com',
-            'password' => Hash::make('password'),
-            'role' => 'admin',
-            'phone' => '01700000000',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'admin@school.com'],
+            [
+                'name' => 'Admin',
+                'password' => Hash::make('password'),
+                'role' => 'admin',
+                'phone' => '01700000000',
+            ]
+        );
 
-        User::create([
-            'name' => 'Teacher User',
-            'email' => 'teacher@school.com',
-            'password' => Hash::make('password'),
-            'role' => 'teacher',
-            'phone' => '01700000001',
-        ]);
+        User::firstOrCreate(
+            ['email' => 'teacher@school.com'],
+            [
+                'name' => 'Teacher User',
+                'password' => Hash::make('password'),
+                'role' => 'teacher',
+                'phone' => '01700000001',
+            ]
+        );
 
         $classes = [
             ['name' => 'Class 6', 'code' => 'C6', 'sections' => ['A', 'B']],

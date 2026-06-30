@@ -12,6 +12,7 @@ if [ "$DB_CONNECTION" = "sqlite" ]; then
 fi
 
 php artisan migrate --force --no-interaction
+php artisan db:seed --class=AdminUserSeeder --force --no-interaction
 php artisan config:clear
 php artisan config:cache
 php artisan route:cache
