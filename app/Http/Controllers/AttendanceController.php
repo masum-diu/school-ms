@@ -6,6 +6,7 @@ use App\Models\Attendance;
 use App\Models\SchoolClass;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 class AttendanceController extends Controller
@@ -45,16 +46,28 @@ class AttendanceController extends Controller
             'attendance.*' => 'in:present,absent,late,leave',
         ]);
 
+        $date = Carbon::parse($data['date'])->toDateString();
+
         foreach ($data['attendance'] as $studentId => $status) {
-            Attendance::updateOrCreate(
-                ['student_id' => $studentId, 'date' => $data['date']],
-                [
-                    'school_class_id' => $data['school_class_id'],
-                    'section_id' => $data['section_id'],
-                    'status' => $status,
-                    'marked_by' => Auth::id(),
-                ]
-            );
+            $attributes = [
+                'school_class_id' => $data['school_class_id'],
+                'section_id' => $data['section_id'],
+                'status' => $status,
+                'marked_by' => Auth::id(),
+            ];
+
+            $attendance = Attendance::where('student_id', $studentId)
+                ->whereDate('date', $date)
+                ->first();
+
+            if ($attendance) {
+                $attendance->update($attributes);
+            } else {
+                Attendance::create(array_merge($attributes, [
+                    'student_id' => $studentId,
+                    'date' => $date,
+                ]));
+            }
         }
 
         return back()->with('success', 'Attendance saved successfully.');
